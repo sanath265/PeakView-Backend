@@ -4,7 +4,8 @@ import { ValidationPipe } from '@nestjs/common';
 import { Logger } from 'nestjs-pino/Logger';
 
 async function bootstrap() {
-  console.log("hiiii")
+  
+  console.log("testingwSdui   hello")
   const app = await NestFactory.create(AuthModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useLogger(app.get(Logger));
