@@ -25,7 +25,7 @@ import { ConfigModule } from '../config';
     //     imports: [ConfigModule],
     //     useFactory: (configService: ConfigService)=> ({
     //         uri: configService.get('MONGODB_URI')
-    //     }),
+        //     }),
     //     inject:[ConfigService]
     // })]
 })
