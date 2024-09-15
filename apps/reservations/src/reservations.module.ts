@@ -8,6 +8,8 @@ import {
   ReservationSchema,
 } from './reservations/models/reservation.schema';
 import { LoggerModule } from '@app/common/logger';
+import { ConfigModule } from '@nestjs/config';
+import * as Joi from 'joi';
 
 
 @Module({
@@ -16,7 +18,16 @@ import { LoggerModule } from '@app/common/logger';
     DatabaseModule.forFeature([
       { name: ReservationDocument.name, schema: ReservationSchema },
     ]),
-    LoggerModule
+    LoggerModule,
+    //always configure the configModule for that microservice within the module folder itself
+    ConfigModule.forRoot({
+      //put isGlobal as true so that the configModule is available everywhere within this service
+      isGlobal: true,
+      validationSchema: Joi.object({
+        MONGODB_URI: Joi.string().required(),
+        PORT: Joi.number().required()
+      })
+    })
     
   ],
   controllers: [ReservationsController],

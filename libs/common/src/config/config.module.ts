@@ -1,24 +1,31 @@
-import { Module } from '@nestjs/common';
-import {ConfigService, ConfigModule as NestConfigModule} from '@nestjs/config'
-//if import Joi from 'joi' causes an error, use like below
-import * as Joi from 'joi';
+// import { Module } from '@nestjs/common';
+// import {ConfigService, ConfigModule as NestConfigModule} from '@nestjs/config'
+// //if import Joi from 'joi' causes an error, use like below
+// import * as Joi from 'joi';
 
-@Module({
-    imports:[NestConfigModule.forRoot({
-        validationSchema: Joi.object({
-            MONGODB_URI: Joi.string().required()
-        })
-    }
+
+
+
+//here as you can see, we are validating all environment variables of all microservices
+//in a single file, but the .env files itself, there is each one for a given microservice
+//so we have to do validation also similarly, so comment out this file
+
+// @Module({
+//     imports:[NestConfigModule.forRoot({
+//         validationSchema: Joi.object({
+//             MONGODB_URI: Joi.string().required()
+//         })
+//     }
 
 
        
         
 
-    )],
-    providers: [ConfigService],
-    exports: [ConfigService],
-})
-export class ConfigModule {}
+//     )],
+//     providers: [ConfigService],
+//     exports: [ConfigService],
+// })
+// export class ConfigModule {}
 
 
 

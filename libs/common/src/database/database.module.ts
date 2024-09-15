@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import {ConfigService } from '@nestjs/config';
 //import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ModelDefinition, MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule } from '../config';
+
 //import { ConfigService } from '@nestjs/config';
 
 @Module({
@@ -12,7 +12,6 @@ import { ConfigModule } from '../config';
 
     //this is from forRootAsync method in the MongooseModule nestjs documentation
     imports: [MongooseModule.forRootAsync({
-        imports: [ConfigModule],
         useFactory: (config: ConfigService)=>({
             uri: config.get('MONGODB_URI')
         }),
