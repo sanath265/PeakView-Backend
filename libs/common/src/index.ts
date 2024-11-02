@@ -5,4 +5,4 @@ export * from './database';
 //index.ts in the database folder exports from there to the src folder level
 //this index.ts meanwhile takes that export and exports it to the common level which
 //is accessible in the tsconfig.json
-export * from './logger'
+export * from './logger';

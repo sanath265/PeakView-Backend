@@ -5,13 +5,14 @@ import { DatabaseModule } from '@app/common';
 import { UserDocument, UserSchema } from './models/user.schema';
 import { UsersRepository } from './users.repository';
 
-
 @Module({
-  imports: [DatabaseModule,
+  imports: [
+    DatabaseModule,
     DatabaseModule.forFeature([
       { name: UserDocument.name, schema: UserSchema },
-    ]),],
+    ]),
+  ],
   controllers: [UsersController],
-  providers: [UsersService, UsersRepository]
+  providers: [UsersService, UsersRepository],
 })
 export class UsersModule {}

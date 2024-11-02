@@ -5,7 +5,7 @@
 //     invoiceId: string;
 // }
 
-import { PartialType } from "@nestjs/mapped-types";
-import { CreateReservationDto } from "./create-reservation.dto";
+import { PartialType } from '@nestjs/mapped-types';
+import { CreateReservationDto } from './create-reservation.dto';
 
-export class UpdateReservationDto extends PartialType(CreateReservationDto){}
+export class UpdateReservationDto extends PartialType(CreateReservationDto) {}

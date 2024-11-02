@@ -5,15 +5,15 @@ import { Logger } from 'nestjs-pino/Logger';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  
-  console.log("testingwSdui   hello")
+  console.log('testingwSdui   hello');
   const app = await NestFactory.create(AuthModule);
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.useLogger(app.get(Logger));
 
-  //instantiating the config service like this, allows you to 
+  //instantiating the config service like this, allows you to
   //retrieve any injectable
-  const configService = app.get(ConfigService)
-  await app.listen(configService.get("PORT"));
+  const configService = app.get(ConfigService);
+  //await app.listen(configService.get('PORT'));
+  await app.listen(3001);
 }
 bootstrap();

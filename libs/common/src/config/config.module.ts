@@ -3,9 +3,6 @@
 // //if import Joi from 'joi' causes an error, use like below
 // import * as Joi from 'joi';
 
-
-
-
 //here as you can see, we are validating all environment variables of all microservices
 //in a single file, but the .env files itself, there is each one for a given microservice
 //so we have to do validation also similarly, so comment out this file
@@ -17,17 +14,11 @@
 //         })
 //     }
 
-
-       
-        
-
 //     )],
 //     providers: [ConfigService],
 //     exports: [ConfigService],
 // })
 // export class ConfigModule {}
-
-
 
 //NestCongigModule instead of ConfigModule so as to not collide with t
 //our module also named ConfigModule
@@ -40,13 +31,12 @@
 //validation schema to ensure that we throw an error when the required env variables
 //are not available on startup
 
-
 //put this inside for root to access additional functionality
- // {
-        //     validationSchema: Joi.object({
-        //         //now specify the env variables which are required
-        //         //meaning the value has to be a string, and it is required
-        //         MONGODB_URI: Joi.string().required()
-    
-        //     })
-        // }
+// {
+//     validationSchema: Joi.object({
+//         //now specify the env variables which are required
+//         //meaning the value has to be a string, and it is required
+//         MONGODB_URI: Joi.string().required()
+
+//     })
+// }

@@ -33,6 +33,6 @@ export class ReservationsService {
   }
 
   remove(_id: string) {
-    return this.reservationsRepository.findOneAndDelete({_id})
+    return this.reservationsRepository.findOneAndDelete({ _id });
   }
 }
