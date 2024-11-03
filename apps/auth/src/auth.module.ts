@@ -26,6 +26,7 @@ import * as Joi from 'joi';
     ConfigModule.forRoot({
       //put isGlobal as true so that the configModule is available everywhere within this service
       isGlobal: true,
+      envFilePath: './apps/auth/.env',
       validationSchema: Joi.object({
         MONGODB_URI: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),

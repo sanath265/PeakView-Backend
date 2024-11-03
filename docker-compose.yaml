@@ -16,6 +16,8 @@ services:
     environment:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true  # Improves file watching in Docker
+    depends_on:
+      - mongo
 
   auth:
     build:
@@ -32,6 +34,8 @@ services:
     environment:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true  # Improves file watching in Docker
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo
