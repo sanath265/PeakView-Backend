@@ -6,3 +6,7 @@ export * from './database';
 //this index.ts meanwhile takes that export and exports it to the common level which
 //is accessible in the tsconfig.json
 export * from './logger'
+export * from './auth'
+export * from './constants'
+export * from './decorators'
+export * from './dto'

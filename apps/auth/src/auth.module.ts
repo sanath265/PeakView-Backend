@@ -6,6 +6,8 @@ import { LoggerModule } from '@app/common';
 import {JwtModule} from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
+import { LocalStrategy } from '../strategies/local.strategy';
+import { JwtStrategy } from '../strategies/jwt.strategy';
 
 //logger module is the module inside nestjs pino
 //even if you have imported something in another file
@@ -28,10 +30,14 @@ import * as Joi from 'joi';
       isGlobal: true,
       envFilePath: './apps/auth/.env',
       validationSchema: Joi.object({
+
+        //the below code is used for verifying verifying whether all .env variables exist or not
+        //therefore you always have to come back here and make changes whenever you add a new .env variable
         MONGODB_URI: Joi.string().required(),
         JWT_SECRET: Joi.string().required(),
         JWT_EXPIRATION: Joi.string().required(),
-        PORT: Joi.number().required()
+        HTTP_PORT: Joi.number().required(),
+        TCP_PORT: Joi.number().required()
       })
     }),
     JwtModule.registerAsync({
@@ -43,6 +49,8 @@ import * as Joi from 'joi';
     }), inject: [ConfigService]
   })],
   controllers: [AuthController],
-  providers: [AuthService],
+  //all injectable classes have to be added as providers here, dont forget
+  //make sure to add all your security strategies under the provider section of the auth module
+  providers: [AuthService,LocalStrategy,JwtStrategy],
 })
 export class AuthModule {}
