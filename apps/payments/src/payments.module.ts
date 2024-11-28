@@ -10,6 +10,8 @@ import * as Joi from 'joi';
 import { LoggerModule } from '@app/common';
  
 
+//when you create a new env variable, always come here and use Joi to verify it
+//this method is to be remembered
 @Module({
   imports: [ConfigModule.forRoot({
     //put isGlobal as true so that the configModule is available everywhere within this service
@@ -19,7 +21,8 @@ import { LoggerModule } from '@app/common';
 
       //the below code is used for verifying verifying whether all .env variables exist or not
       //therefore you always have to come back here and make changes whenever you add a new .env variable
-      PORT: Joi.number().required()
+      PORT: Joi.number().required(),
+      STRIPE_SECRET_KEY: Joi.string().required()
     })
   }),
 LoggerModule],
