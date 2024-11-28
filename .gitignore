@@ -39,6 +39,10 @@ lerna-debug.log*
 # Ignore .env file for payments microservice
 apps/payments/.env
 
+#explicitly unignore the required .env files:
+!apps/auth/.env
+!apps/reservations/.env
+
 
 # # dotenv environment variable files
 # .env
