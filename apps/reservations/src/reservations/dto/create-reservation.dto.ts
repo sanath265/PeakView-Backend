@@ -1,5 +1,6 @@
 import { Type } from "class-transformer";
-import { IsDate, IsNotEmpty, IsString } from "class-validator";
+import { IsDate, IsDefined, IsNotEmpty, IsNotEmptyObject, IsNumber, IsString, ValidateNested } from "class-validator";
+import { CreateChargeDto } from "@app/common";
 
 export class CreateReservationDto{
 
@@ -18,4 +19,12 @@ export class CreateReservationDto{
     @IsString()
     @IsNotEmpty()
     invoiceId: string;
+
+    @IsDefined()
+    @IsNotEmptyObject()
+    @ValidateNested()
+    //type decorator in order to turn that object which we got into the type we want
+    @Type(() => CreateChargeDto)
+    charge: CreateChargeDto
+
 }

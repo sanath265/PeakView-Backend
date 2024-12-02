@@ -6,9 +6,20 @@
 //class names should always start with capital letters and continue in camel case
 
 import Stripe from "stripe"
+import { CardDto } from "./card.dto"
+import { IsDefined, IsNotEmptyObject, IsNumber, ValidateNested } from "class-validator";
+import { Type } from "class-transformer";
 
+//this is nested DTOs, remember how to do this
+//cardDto is nested in the CreateChargeDto (check the nestjs temporary code store, to see how to write the body object for such a dto in postman)
 export class CreateChargeDto {
-    card: Stripe.PaymentMethodCreateParams.Card;
+    @IsDefined()
+    @IsNotEmptyObject()
+    @ValidateNested()
+    @Type(() => CardDto)
+    card: CardDto;
+
+    @IsNumber()
     amount: number
 
 }

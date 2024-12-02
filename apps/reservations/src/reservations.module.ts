@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
-import { DatabaseModule } from '@app/common';
+import { DatabaseModule} from '@app/common';
 import { ReservationsRepository } from './reservations.repository';
 import {
   ReservationDocument,
@@ -11,7 +11,7 @@ import { LoggerModule } from '@app/common/logger';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as Joi from 'joi';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { AUTH_SERVICE } from '@app/common';
+import { AUTH_SERVICE , PAYMENTS_SERVICE } from '@app/common';
 
 
 @Module({
@@ -28,7 +28,13 @@ import { AUTH_SERVICE } from '@app/common';
       envFilePath: './apps/reservations/.env',
       validationSchema: Joi.object({
         MONGODB_URI: Joi.string().required(),
-        PORT: Joi.number().required()
+        PORT: Joi.number().required(),
+        //make sure to also add validation to the env variables that you are getting to operate the client proxies
+        AUTH_HOST: Joi.string().required(),
+        AUTH_PORT: Joi.number().required(),
+        PAYMENTS_HOST: Joi.string().required(),
+        PAYMENTS_PORT: Joi.number().required()
+
       })
     }),
 
@@ -44,6 +50,11 @@ import { AUTH_SERVICE } from '@app/common';
     //use factory allows us to directly inject various modules inside methods itself and access methods from those injected modules directly
     ClientsModule.registerAsync([
       {
+        //this AUTH_SERVICE is called the injection token, that gets us the hostname (i specified this in the contants file in the lib/common directory)
+        //injection token like this is required (as first of all we dont want to hardcode the host names directly in the code, if we want to change it in the future)
+        //and secondly because each microservice is running in its own container, we need that particular hostname for this interservice communication
+        //as you can see here the reservations microservice is communicating with the auth microservice (through this injection token) 
+        //which are required (i.e. host and port) in order to directly communicate with the auth microservice
         name: AUTH_SERVICE,
         useFactory: (configService: ConfigService) => ({
           transport: Transport.TCP,
@@ -56,6 +67,21 @@ import { AUTH_SERVICE } from '@app/common';
             //AUTH_PORT   obv has to be the TCP port (3002) on which that specific route (in auth controller) is listening to in order to handle requests from reservations microservice
             host: configService.get('AUTH_HOST'),
             port: configService.get('AUTH_PORT')
+
+          }
+        }),
+        //make sure to also inject into the registerAsync method whatever module u are using inside it, using the inject option
+        inject: [ConfigService]
+
+      },
+      {
+        name: PAYMENTS_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            
+            host: configService.get('PAYMENTS_HOST'),
+            port: configService.get('PAYMENTS_PORT')
 
           }
         }),
