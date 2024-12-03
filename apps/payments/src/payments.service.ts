@@ -48,7 +48,9 @@ export class PaymentsService {
     });
 
     //after the user is charged is when we have to send the notification
-    this.notificationsService.emit('notify_email',{ email })
+    this.notificationsService.emit('notify_email',{ 
+      email,
+      text: `Your payment of $${amount} has completed successfully` })
 
     return paymentIntent; 
   }

@@ -37,7 +37,9 @@ lerna-debug.log*
 
 
 # Ignore .env file for payments microservice
+#also ignore .env of the notifications microservice, as it contains google oauth secrets
 apps/payments/.env
+apps/notifications/.env
 
 #explicitly unignore the required .env files:
 !apps/auth/.env
