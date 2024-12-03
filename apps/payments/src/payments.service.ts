@@ -1,7 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Stripe from 'stripe';
-import { CreateChargeDto } from '@app/common';
+import { CreateChargeDto, NOTIFICATIONS_SERVICE } from '@app/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { PaymentsCreateChargeDto } from './dto/payments-create-charge.dto';
 
 @Injectable()
 export class PaymentsService {
@@ -14,7 +16,7 @@ export class PaymentsService {
 
   //always remember that in order to access the env variables inside another service
   //you will need to inject the ConfigService like below inside the constructor (using private readonly )
-  constructor(private readonly configService: ConfigService){
+  constructor(private readonly configService: ConfigService, @Inject(NOTIFICATIONS_SERVICE) private readonly notificationsService: ClientProxy){
 
   }
 
@@ -28,7 +30,7 @@ export class PaymentsService {
 
 
 
-  async createCharge({card,amount}: CreateChargeDto){
+  async createCharge({card,amount,email}: PaymentsCreateChargeDto){
     //(as direct handling of credit card info is no longer allowed, we now have to handle only using tokens), therefore payment method not required
     const paymentMethod = await this.stripe.paymentMethods.create({
       type: 'card',
@@ -44,6 +46,9 @@ export class PaymentsService {
       payment_method_types: ['card'],
       currency: 'usd',
     });
+
+    //after the user is charged is when we have to send the notification
+    this.notificationsService.emit('notify_email',{ email })
 
     return paymentIntent; 
   }

@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { UpdateReservationDto } from './reservations/dto';
 import { ReservationsRepository } from './reservations.repository';
 import { CreateReservationDto } from './reservations/dto';
-import { PAYMENTS_SERVICE } from '@app/common';
+import { PAYMENTS_SERVICE, UserDto } from '@app/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { map } from 'rxjs';
 
@@ -16,7 +16,7 @@ export class ReservationsService {
   ) {}
 
 
-  async create(createReservationDto: CreateReservationDto,userId: string) {
+  async create(createReservationDto: CreateReservationDto,{email, _id: userId}: UserDto) {
     //now after creating the reservation you want to bill the user for that reservation
     //for this you need to edit the create-reservation dto, to include the card details as well
     
@@ -42,7 +42,10 @@ export class ReservationsService {
     //here actually instead of subscribe, we can use the pipe operator to directly send the response to the frontend
     //nestjs will automatically subscribe to the observable (here we have to first transform the response using the map operator)
 
-    return this.paymentsService.send('create_charge',createReservationDto.charge).pipe(
+    return this.paymentsService.send('create_charge',{
+      ...createReservationDto.charge,
+      email
+    }).pipe(
       map((res) => {
         console.log(res)
       
