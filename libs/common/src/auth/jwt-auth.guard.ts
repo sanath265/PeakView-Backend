@@ -1,5 +1,5 @@
 import { CanActivate, ExecutionContext, Inject, Injectable } from "@nestjs/common";
-import { map, Observable, tap } from "rxjs";
+import { catchError, map, Observable, of, tap } from "rxjs";
 import { AUTH_SERVICE } from "../constants/services";
 import { ClientProxy } from "@nestjs/microservices";
 import { UserDto } from "@app/common";
@@ -83,11 +83,15 @@ export class JwtAuthGuard implements CanActivate {
                 //here we just want to add the user object from the response (from auth microservice) onto the request object
                 context.switchToHttp().getRequest().user = res;
             }),
-            map(() => true)
+            map(() => true),
 
             //return true using the map operator if we have a successful response from the auth microservice (and not an error)
             //now canActivate (if it returns a True) will allow the request to proceed
 
+            //here if any error occurs in the above auth code, it will simply return false
+            //thus enabling graceful handling (i.e. it gives the 403 forbidden resource error instead of the general 500 internal server error)
+            //remember to do stuff like this, when something goes wrong it should be gracefully handled (i.e. its own error should be given, instead of a general 500 internal server error)
+            catchError(()=> of(false))
         )
     }
 

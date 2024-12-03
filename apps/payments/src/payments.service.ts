@@ -29,14 +29,15 @@ export class PaymentsService {
 
 
   async createCharge({card,amount}: CreateChargeDto){
+    //(as direct handling of credit card info is no longer allowed, we now have to handle only using tokens), therefore payment method not required
     const paymentMethod = await this.stripe.paymentMethods.create({
       type: 'card',
-      card 
+      card: { token: card.token }, // Use the token to create a PaymentMethod
 
     });
 
     const paymentIntent = await this.stripe.paymentIntents.create({
-      payment_method: paymentMethod.id,
+      payment_method: paymentMethod.id, 
       //by default smallest unit of currency (i.e. cent) is considered in the stripe API
       amount: amount * 100,
       confirm: true,

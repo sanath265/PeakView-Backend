@@ -12,13 +12,15 @@ export class CreateReservationDto{
     @Type(() => Date)
     endDate: Date;
 
-    @IsString()
-    @IsNotEmpty()
-    placeId: string;
+    //place if also removed as it is not being used
+    // @IsString()
+    // @IsNotEmpty()
+    // placeId: string;
 
-    @IsString()
-    @IsNotEmpty()
-    invoiceId: string;
+    //removing user supplied invoice id here, as the invoice id has to be based on the stripe transaction
+    // @IsString()
+    // @IsNotEmpty()
+    // invoiceId: string;
 
     @IsDefined()
     @IsNotEmptyObject()

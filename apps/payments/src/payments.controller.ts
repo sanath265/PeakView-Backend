@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UsePipes, ValidationPipe } from '@nestjs/common';
 import { PaymentsService } from './payments.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateChargeDto } from '@app/common';
@@ -17,6 +17,9 @@ export class PaymentsController {
   //the data payload will obv be of the type CreateChargeDto
   //the dto itself is nothing but a class, but payloads from routes are handled this way in order to make it more organised and reduce confusion
   @MessagePattern('create_charge')
+  //this below pipes code automatically validates all the data on the incoming payload
+  //i.e. instead of the reservation service sending the charge, if it sends something else, then an error will be raised
+  @UsePipes(new ValidationPipe())
   async createCharge(@Payload() data: CreateChargeDto) {
     //after extracting the payload above, i just directly pass it to the corresponding method (which takes in the dto class type as input itself)
     //this pattern of coding is important to remember in nestjs::  create_logic_method_in_service_file ---> write_the_route_in_controller ---> create_corresponding_dto_if_required ---> edit_route_and_service_method_to_take_as_input_the_dto
