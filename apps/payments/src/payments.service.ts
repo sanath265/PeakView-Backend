@@ -10,7 +10,7 @@ export class PaymentsService {
   //clients like the one below always use private readonly
   //also  in order to actually access an env variable, you can do ::  this.configService.get('STRIPE_SECRET_KEY')  (remember this as well)
   private readonly stripe = new Stripe(this.configService.get('STRIPE_SECRET_KEY'),{
-    apiVersion:'2024-10-28.acacia',
+    apiVersion:'2024-10-28.acacia' as any,
   });
   
 

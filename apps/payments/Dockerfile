@@ -5,6 +5,8 @@ WORKDIR /usr/src/app
 # Copy package.json and yarn.lock for yarn
 COPY package.json ./ 
 COPY yarn.lock ./
+COPY tsconfig.json tsconfig.json
+COPY nest-cli.json nest-cli.json
 
 # Install Yarn globally
 RUN npm install -g yarn --force
@@ -13,10 +15,13 @@ RUN npm install -g yarn --force
 RUN yarn install
 
 # Copy the rest of the application files
-COPY . .
+COPY apps/payments apps/payments
+COPY libs libs
+
+RUN cd apps/payments && yarn install
 
 # Build the application
-RUN yarn run build
+RUN yarn run build payments
 
 FROM node:alpine as production
 
