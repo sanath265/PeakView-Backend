@@ -18,6 +18,7 @@ steps:
 
 
  #auth
+ #testing
 steps:
  - name: 'gcr.io/cloud-builders/docker'
    args: [
