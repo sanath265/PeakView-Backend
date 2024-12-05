@@ -1,5 +1,5 @@
-#reservations
 steps:
+# reservations
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
@@ -15,12 +15,8 @@ steps:
     'push',
     'us-central1-docker.pkg.dev/sleepr-443603/reservations/production'
   ]
-options:
-  logging: CLOUD_LOGGING_ONLY
 
-
-#auth
-steps:
+# auth
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
@@ -36,12 +32,8 @@ steps:
     'push',
     'us-central1-docker.pkg.dev/sleepr-443603/auth/production'
   ]
-options:
-  logging: CLOUD_LOGGING_ONLY
 
-
-#payments
-steps:
+# payments
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
@@ -57,12 +49,8 @@ steps:
     'push',
     'us-central1-docker.pkg.dev/sleepr-443603/payments/production'
   ]
-options:
-  logging: CLOUD_LOGGING_ONLY
 
-
-#notifications
-steps:
+# notifications
 - name: 'gcr.io/cloud-builders/docker'
   args: [
     'build',
@@ -78,5 +66,6 @@ steps:
     'push',
     'us-central1-docker.pkg.dev/sleepr-443603/notifications/production'
   ]
+
 options:
   logging: CLOUD_LOGGING_ONLY
