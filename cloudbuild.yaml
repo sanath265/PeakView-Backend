@@ -6,7 +6,7 @@ steps:
     '-t',
     'us-central1-docker.pkg.dev/sleepr-443603/reservations/production',
     '-f',
-    'apps/reservations/dockerfile',
+    'apps/reservations/Dockerfile',
     '.'
   ]
 
@@ -27,7 +27,7 @@ steps:
     '-t',
     'us-central1-docker.pkg.dev/sleepr-443603/auth/production',
     '-f',
-    'apps/auth/dockerfile',
+    'apps/auth/Dockerfile',
     '.'
   ]
 
@@ -48,7 +48,7 @@ steps:
     '-t',
     'us-central1-docker.pkg.dev/sleepr-443603/payments/production',
     '-f',
-    'apps/payments/dockerfile',
+    'apps/payments/Dockerfile',
     '.'
   ]
 
@@ -69,7 +69,7 @@ steps:
     '-t',
     'us-central1-docker.pkg.dev/sleepr-443603/notifications/production',
     '-f',
-    'apps/notifications/dockerfile',
+    'apps/notifications/Dockerfile',
     '.'
   ]
 
