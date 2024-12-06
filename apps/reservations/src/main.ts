@@ -19,6 +19,8 @@ async function bootstrap() {
   //instantiating the config service like this, allows you to 
   //retrieve any injectable
   const configService = app.get(ConfigService)
+  console.log("Resolved PORT from ConfigService:", configService.get("PORT"));
+
   await app.listen(configService.get("PORT"));
 }
 bootstrap();
