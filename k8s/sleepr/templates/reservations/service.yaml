@@ -14,5 +14,5 @@ spec:
     targetPort: 3004
   selector:
     app: reservations
-  type: ClusterIP
+  type: NodePort
 
