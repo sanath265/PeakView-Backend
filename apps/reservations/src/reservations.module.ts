@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ReservationsService } from './reservations.service';
 import { ReservationsController } from './reservations.controller';
-import { DatabaseModule} from '@app/common';
+import { DatabaseModule, HealthModule} from '@app/common';
 import { ReservationsRepository } from './reservations.repository';
 import {
   ReservationDocument,
@@ -15,7 +15,7 @@ import { AUTH_SERVICE , PAYMENTS_SERVICE } from '@app/common';
 
 
 @Module({
-  imports: [
+  imports: [HealthModule,
     DatabaseModule,
     DatabaseModule.forFeature([
       { name: ReservationDocument.name, schema: ReservationSchema },
@@ -89,9 +89,9 @@ import { AUTH_SERVICE , PAYMENTS_SERVICE } from '@app/common';
         inject: [ConfigService]
 
       }
-    ])
+    ]),
     
-  ],
+    ], 
   controllers: [ReservationsController],
   providers: [ReservationsService, ReservationsRepository],
 })
