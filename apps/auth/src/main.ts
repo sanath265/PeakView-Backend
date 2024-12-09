@@ -44,6 +44,25 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
 
   
+
+    // Explicitly handle OPTIONS requests before enabling CORS
+  // This middleware will respond to any OPTIONS request with appropriate CORS headers
+  app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+      // Configure your allowed origin and headers as needed
+      res.header('Access-Control-Allow-Origin', '*');
+      res.header('Access-Control-Allow-Methods', 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS');
+      res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+      return res.status(200).send();
+    }
+    next();
+  });
+
+
+
+
+
+
   // Enable CORS here (on the HTTP server)
   // Adjust the origin and other options as needed.
   app.enableCors({
