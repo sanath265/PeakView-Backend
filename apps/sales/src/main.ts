@@ -24,6 +24,10 @@ async function bootstrap() {
   //retrieve any injectable
   const configService = app.get(ConfigService)
   console.log("Resolved PORT from ConfigService:", configService.get("PORT"));
+  console.log("Resolved INVENTORY PORT from ConfigService:", configService.get("INVENTORY_PORT"));
+
+  // // This line is crucial. It starts the microservice layer.
+  // await app.startAllMicroservices();
 
   await app.listen(configService.get("PORT"));
 }

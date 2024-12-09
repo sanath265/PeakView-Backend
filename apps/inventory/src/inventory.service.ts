@@ -88,4 +88,5 @@ export class InventoryService {
   async remove(_id: string) {
     return this.inventoryRepository.findOneAndDelete({_id})
   }
+  
 }

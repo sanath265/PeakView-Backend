@@ -14,11 +14,15 @@ import {
   Param,
   Delete,
   UseGuards,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { InventoryService } from './inventory.service';
 import { CreateInventoryDto, UpdateInventoryDto } from './inventory/dto'
 //@app/common is just a short form for the libs/common folder where all of our common code is located
 import { CurrentUser, JwtAuthGuard, UserDto } from '@app/common';
+import { EventPattern, Payload } from '@nestjs/microservices';
+
 
 
 
@@ -92,6 +96,60 @@ export class InventoryController {
   async remove(@Param('id') id: string) {
     return this.inventoryService.remove(id);
   }
+
+
+
+//this is the way to code for event style communication (which requires EventPattern) instead of request-response style (which requires message pattern)
+@EventPattern('update_inventory_due_to_sales')
+async update_inventory_due_to_sales(@Payload() data: any) {
+  console.log("inside the inventory service, after being called by the sales service")
+  //here you can use the inventory service methods
+
+  //here data.id is the id of the product type and not the id of the sales transaction
+  //now the data from the sales service cannot provide you the id of the product type
+  //it will only provide you the name of the product type
+  //so use that name to query the database and get the id of the product type
+  //you can do this by getting all the product types from the database and then using a forloop to go through them
+  //match the name then get the id from that
+  //also just take the stock and productName from the incoming dto, create a new dto from that
+  //and then use it to update the database as threshold and cost value is 0 in the incoming dto as they are not being used
+
+  const productName = data.productName
+  const subtractStock = data.Stock
+  const allProducts = await this.inventoryService.findAll()
+  // Find the product with the matching productName
+  const product = allProducts.find(product => product.productName === productName);
+  // Extract the product ID and current stock
+  const productId = product._id; 
+  const currentStock = product.Stock;
+  const threshold = product.Threshold;
+  const cost = product.Cost;
+
+  // Calculate the new stock value
+  const newStock = currentStock - subtractStock;
+
+    
+  const updatedInventoryDetail: UpdateInventoryDto = {
+      Stock: newStock,
+      productName: product.productName, // Ensure you include necessary fields for the update,
+      Threshold: threshold,
+      Cost: cost,
+
+    };
+
+  console.log("DID LOGIC TO UPDATE INVENTORY")
+
+
+  this.inventoryService.update(productId.toString(), updatedInventoryDetail)
+  console.log("UPDATED INVENTORY DUE TO SALES")
+
+  
+
+}
+
+
+
+
 }
 
 

@@ -2,7 +2,7 @@
 import { SalesController } from './sales.controller';
 import { SalesService } from './sales.service';
 import { Module } from '@nestjs/common';
-import { DatabaseModule, HealthModule} from '@app/common';
+import { DatabaseModule, HealthModule, INVENTORY_SERVICE} from '@app/common';
 import { SalesRepository } from './sales.repository';
 import {
   SalesDocument,
@@ -43,7 +43,9 @@ import { AUTH_SERVICE , PAYMENTS_SERVICE } from '@app/common';
         AUTH_HOST: Joi.string().required(),
         AUTH_PORT: Joi.number().required(),
         PAYMENTS_HOST: Joi.string().required(),
-        PAYMENTS_PORT: Joi.number().required()
+        PAYMENTS_PORT: Joi.number().required(),
+        INVENTORY_HOST: Joi.string().required(),
+        INVENTORY_PORT: Joi.number().required()
 
       })
     }),
@@ -92,6 +94,21 @@ import { AUTH_SERVICE , PAYMENTS_SERVICE } from '@app/common';
             
             host: configService.get('PAYMENTS_HOST'),
             port: configService.get('PAYMENTS_PORT')
+
+          }
+        }),
+        //make sure to also inject into the registerAsync method whatever module u are using inside it, using the inject option
+        inject: [ConfigService]
+
+      },
+      {
+        name: INVENTORY_SERVICE,
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            
+            host: configService.get('INVENTORY_HOST'),
+            port: configService.get('INVENTORY_PORT')
 
           }
         }),

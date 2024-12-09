@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { UpdateSalesDto } from './sales/dto';
 import { SalesRepository } from './sales.repository';
 import { CreateSalesDto } from './sales/dto';
-import { PAYMENTS_SERVICE, UserDto } from '@app/common';
+import { INVENTORY_SERVICE, PAYMENTS_SERVICE, UserDto } from '@app/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { map } from 'rxjs';
 
@@ -19,6 +19,7 @@ export class SalesService {
     private readonly salesRepository: SalesRepository,
     //here you can directly use the @Inject decorator to inject the ClientProxy instance for the PAYMENTS_SERVICE
     @Inject(PAYMENTS_SERVICE) private readonly paymentsService: ClientProxy,
+    @Inject(INVENTORY_SERVICE) private readonly inventoryService: ClientProxy,
   ) {}
 
 
@@ -48,12 +49,27 @@ export class SalesService {
     //here actually instead of subscribe, we can use the pipe operator to directly send the response to the frontend
     //nestjs will automatically subscribe to the observable (here we have to first transform the response using the map operator)
 
+    
+
     return this.paymentsService.send('create_charge',{
       ...createSalesDto.charge,
       email
     }).pipe(
       map((res) => {
-        console.log(res)
+      console.log(res)
+
+      //here i am subtracting stock from the inventory before updating the sales transactions table
+      this.inventoryService.emit('update_inventory_due_to_sales',{ 
+        //here you have to provide all the properties of the createInventoryDto
+        //dont worry about the cost and threshold values, it just required to be filled in order to satisfy the dto
+        //its processing will be handles in the inventory microservice
+        productName: createSalesDto.productName,
+        Stock: createSalesDto.quantity,
+        Threshold: 0,
+        Cost: 0,
+      
+      })
+      console.log("SENT OFF DATA TO UPDATE INVENTORY")
       
       return this.salesRepository.create({
         ...createSalesDto,
