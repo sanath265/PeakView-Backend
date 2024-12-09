@@ -25,6 +25,8 @@ spec:
               key: connectionString
         - name: PORT
           value: '3006'
+        - name: TCP_PORT
+          value: '3007'
         - name: AUTH_HOST
         #put the name of the auth service here
           value: auth-tcp 
@@ -35,5 +37,6 @@ spec:
         - name: PAYMENTS_PORT
           value: '3001'
         ports:
-         - containerPort: 3004
+         - containerPort: 3006
+         - containerPort: 3007
             

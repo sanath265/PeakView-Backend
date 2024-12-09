@@ -34,6 +34,10 @@ spec:
           value: payments
         - name: PAYMENTS_PORT
           value: '3001'
+        - name: INVENTORY_PORT
+          value: '3007'
+        - name: INVENTORY_HOST
+          value: inventory-tcp
         ports:
-         - containerPort: 3004
+         - containerPort: 3005
             

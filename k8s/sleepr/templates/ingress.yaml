@@ -36,7 +36,7 @@ spec:
           service:
             #here for the name put the name of the service associated with reservations, it will be in the service.yaml file
             #it is just reservations, if you look inside it, then provide the port number that you can access the service on
-            name: inventory
+            name: inventory-http
             port:
              number: 3006
        - path: /auth/*

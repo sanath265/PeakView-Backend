@@ -3,7 +3,7 @@ kind: Service
 metadata:
   labels:
     app: inventory
-  name: inventory
+  name: inventory-http
 spec:
   ports:
   - name: "http"
