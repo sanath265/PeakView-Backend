@@ -1,11 +1,41 @@
 import { NestFactory } from '@nestjs/core';
 import { SalesModule } from './sales.module';
+import { ValidationPipe } from '@nestjs/common';
+import { Logger } from 'nestjs-pino';
+import { ConfigService } from '@nestjs/config';
+//remember this import for cookieParser, whenever u are using it, do not go with the default import suggested by vscode
+import * as cookieParser from 'cookie-parser';
+
+
+
+
+
 
 async function bootstrap() {
+  console.log("hello, this is Sales microservice main.ts")
   const app = await NestFactory.create(SalesModule);
-  await app.listen(3000);
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.useLogger(app.get(Logger));
+
+  //you need to parse cookies for the reservations microservice requests as well
+  //because you want to maintain state accross the various requests
+  app.use(cookieParser());
+  //instantiating the config service like this, allows you to 
+  //retrieve any injectable
+  const configService = app.get(ConfigService)
+  console.log("Resolved PORT from ConfigService:", configService.get("PORT"));
+
+  await app.listen(configService.get("PORT"));
 }
 bootstrap();
+
+
+
+
+
+
+
+
 
 
 
