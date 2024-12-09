@@ -69,6 +69,27 @@ services:
     depends_on:
       - mongo
 
+  sales:
+    build:
+      context: .
+      dockerfile: ./apps/sales/Dockerfile
+      target: development
+    command: yarn start:dev sales
+    env_file:
+      - ./apps/sales/.env
+    ports:
+      - '3005:3005'
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true  # Improves file watching in Docker
+    depends_on:
+      - mongo
+
+
+
+
   mongo:
     image: mongo
     ports:

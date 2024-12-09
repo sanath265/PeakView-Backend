@@ -27,6 +27,13 @@ spec:
             name: auth-http
             port:
              number: 3003
-
+       - path: /users/*
+         pathType: ImplementationSpecific
+         backend:
+          service:
+            # as we want to direct the traffic towards the auth-http service and not the tcp-service, therefore put that particular service name itself
+            name: auth-http
+            port:
+             number: 3003
 
 

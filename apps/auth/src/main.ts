@@ -44,6 +44,20 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
 
   
+  // Enable CORS here (on the HTTP server)
+  // Adjust the origin and other options as needed.
+  app.enableCors({
+    origin: 'http://localhost:3002', 
+    credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Authorization'
+  });
+
+
+
+
+
+
   //to listen to events from microservices over the tcp transport layer
   await app.startAllMicroservices()
 
