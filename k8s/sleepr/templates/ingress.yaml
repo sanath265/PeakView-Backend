@@ -19,6 +19,26 @@ spec:
             name: reservations
             port:
              number: 3004
+       - path: /sales/*
+         #ImplementationSpecific means that GKE will handle all of the routing
+         pathType: ImplementationSpecific
+         backend:
+          service:
+            #here for the name put the name of the service associated with reservations, it will be in the service.yaml file
+            #it is just sales, if you look inside it, then provide the port number that you can access the service on
+            name: sales
+            port:
+             number: 3005
+       - path: /inventory/*
+         #ImplementationSpecific means that GKE will handle all of the routing
+         pathType: ImplementationSpecific
+         backend:
+          service:
+            #here for the name put the name of the service associated with reservations, it will be in the service.yaml file
+            #it is just reservations, if you look inside it, then provide the port number that you can access the service on
+            name: inventory
+            port:
+             number: 3006
        - path: /auth/*
          pathType: ImplementationSpecific
          backend:

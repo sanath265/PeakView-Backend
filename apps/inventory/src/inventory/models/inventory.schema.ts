@@ -2,25 +2,25 @@ import { AbstractDocument } from '@app/common';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema({ versionKey: false })
-export class SalesDocument extends AbstractDocument {
+export class InventoryDocument extends AbstractDocument {
   @Prop()
   timestamp: Date;
-
-  @Prop()
-  customerName: string;
 
   @Prop()
   productName: string;
 
   @Prop()
-  quantity: number;
+  Stock: number;
 
   @Prop()
-  userId: string;
+  Threshold: number;
+
+  @Prop()
+  Cost: number;
 
   @Prop()
   invoiceId: string;
 }
 
-export const SalesSchema =
-  SchemaFactory.createForClass(SalesDocument);
+export const InventorySchema =
+  SchemaFactory.createForClass(InventoryDocument);

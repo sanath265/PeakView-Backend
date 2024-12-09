@@ -89,6 +89,28 @@ services:
 
 
 
+  inventory:
+    build:
+      context: .
+      dockerfile: ./apps/inventory/Dockerfile
+      target: development
+    command: yarn start:dev inventory
+    env_file:
+      - ./apps/inventory/.env
+    ports:
+      - '3006:3006'
+    volumes:
+      - .:/usr/src/app
+    environment:
+      - NODE_ENV=development
+      - CHOKIDAR_USEPOLLING=true  # Improves file watching in Docker
+    depends_on:
+      - mongo
+
+
+
+
+
 
   mongo:
     image: mongo

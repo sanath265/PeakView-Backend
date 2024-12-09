@@ -2,12 +2,9 @@ import { Type } from "class-transformer";
 import { IsDate, IsDefined, IsNotEmpty, IsNotEmptyObject, IsNumber, IsString, ValidateNested } from "class-validator";
 import { CreateChargeDto } from "@app/common";
 
-export class CreateSalesDto{
+export class CreateInventoryDto{
 
 
-    @IsString()
-    @IsNotEmpty()
-    customerName: string;
 
     @IsString()
     @IsNotEmpty()
@@ -15,7 +12,17 @@ export class CreateSalesDto{
 
     @IsNumber()
     @IsNotEmpty()
-    quantity: number;
+    Stock: number;
+
+    @IsNumber()
+    @IsNotEmpty()
+    Threshold: number;
+
+    @IsNumber()
+    @IsNotEmpty()
+    Cost: number;
+
+
 
     @IsDefined()
     @IsNotEmptyObject()
