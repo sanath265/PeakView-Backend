@@ -4,14 +4,27 @@ import { UsersService } from './users.service';
 import { CurrentUser } from '@app/common';
 import { UserDocument } from '@app/common';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { CreateUserProfileDto } from './dto/create-user-profile.dto';
+import { UsersProfileService } from './usersProfile.service';
+import { GetUserProfileDto } from './dto/get-user-profile.dto';
 
 
 //you see the 'users' prefix inside the Controller decorator? that is the path that you should specify in the url
 //after the port, then it comes to the controller of this particular application
 @Controller('users')
 export class UsersController {
+  
+    constructor(private readonly usersService: UsersService, private readonly usersProfileService: UsersProfileService){}
 
-    constructor(private readonly usersService: UsersService){}
+    @Post('profile')
+    async createUserProfile(@Body() createUserProfileDto: CreateUserProfileDto){
+        return this.usersProfileService.createProfile(createUserProfileDto)
+    }
+
+    @Get('profile')
+    async getUserProfile(@Body() getUserProfileDto: GetUserProfileDto){
+        return this.usersProfileService.getUserProfile(getUserProfileDto)
+    }
 
     @Post()
     async createUser(@Body() createUserDto: CreateUserDto){
