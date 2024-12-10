@@ -12,6 +12,7 @@ import { SalesService } from './sales.service';
 import { CreateSalesDto, UpdateSalesDto } from './sales/dto'
 //@app/common is just a short form for the libs/common folder where all of our common code is located
 import { CurrentUser, JwtAuthGuard, UserDto } from '@app/common';
+import { CreateMultipleSalesDto } from './sales/dto/create-multiple-sales.dto';
 
 
 
@@ -49,14 +50,79 @@ export class SalesController {
   //as you can observe below, we can pass in multiple decorators directly into the arguments of any method
   //here a method of a controller route, this allows us to get access to the stuff that we want in a very clean manner
   //like the user object of the current request for example
+
+
+
+
+
+
   @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() createSalesDto: CreateSalesDto, @CurrentUser() user: UserDto ) {
+  async create(@Body() createMultipleSalesDto: CreateMultipleSalesDto, @CurrentUser() user: UserDto ) {
     //the user type didnt exist, so i made a dto for it called the UserDto, remember this method for creating new types
-    const _user =  await this.salesService.create(createSalesDto,user);
-    console.log(user)
-    return _user;
+    
+    // const _user =  await this.salesService.create(createSalesDto,user);
+    // console.log(user)
+    // return _user;
+
+    // Check if reset flag is set
+    if (createMultipleSalesDto.reset) {
+      console.log('Reset flag is set. Deleting all existing sales.');
+
+      // Find all existing sales
+      const allSales = await this.salesService.findAll();
+      console.log(`Found ${allSales.length} sales to delete.`);
+
+      // Remove each sale by ID
+      for (const sale of allSales) {
+        await this.salesService.remove(sale._id.toString()); // Assuming each sale has an `id` field
+      }
+      console.log('All sales deleted.');
+    }
+
+
+
+  
+    const results = []; // To store the results for each sale object
+
+    for (const salesDto of createMultipleSalesDto.sales_array) {
+      // Call the service for each sale object
+      const result = await this.salesService.create(salesDto, user);
+      console.log(result)
+      results.push(result);
+    }
+
+    console.log(user);
+    console.log(results)
+
+    return {
+      message: 'Sales processed successfully',
+      results,
+    };
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   @UseGuards(JwtAuthGuard)

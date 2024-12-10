@@ -5,7 +5,7 @@ import { SalesRepository } from './sales.repository';
 import { CreateSalesDto } from './sales/dto';
 import { INVENTORY_SERVICE, PAYMENTS_SERVICE, UserDto } from '@app/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { map } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 
 
 
@@ -51,7 +51,7 @@ export class SalesService {
 
     
 
-    return this.paymentsService.send('create_charge',{
+    const result = await firstValueFrom(this.paymentsService.send('create_charge',{
       ...createSalesDto.charge,
       email
     }).pipe(
@@ -78,7 +78,9 @@ export class SalesService {
         timestamp: new Date(),
         userId,
       });
-    }))
+    })))
+
+    return result
     
   }
 

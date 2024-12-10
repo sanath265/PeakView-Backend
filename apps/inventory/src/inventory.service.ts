@@ -10,7 +10,7 @@ import { InventoryRepository } from './inventory.repository';
 import { CreateInventoryDto } from './inventory/dto';
 import { PAYMENTS_SERVICE, UserDto } from '@app/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { map } from 'rxjs';
+import { firstValueFrom, map } from 'rxjs';
 
 
 
@@ -53,7 +53,8 @@ export class InventoryService {
     //here actually instead of subscribe, we can use the pipe operator to directly send the response to the frontend
     //nestjs will automatically subscribe to the observable (here we have to first transform the response using the map operator)
 
-    return this.paymentsService.send('create_charge',{
+    const result = await firstValueFrom(
+      this.paymentsService.send('create_charge',{
       ...createInventoryDto.charge,
       email
     }).pipe(
@@ -67,8 +68,11 @@ export class InventoryService {
         timestamp: new Date(),
       });
     }))
+  )
+  return result
     
   }
+
 
   async findAll() {
     return this.inventoryRepository.find({});

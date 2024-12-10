@@ -22,6 +22,7 @@ import { CreateInventoryDto, UpdateInventoryDto } from './inventory/dto'
 //@app/common is just a short form for the libs/common folder where all of our common code is located
 import { CurrentUser, JwtAuthGuard, UserDto } from '@app/common';
 import { EventPattern, Payload } from '@nestjs/microservices';
+import { CreateMultipleInventoriesDto } from './inventory/dto/create-multiple-inventories.dto';
 
 
 
@@ -62,12 +63,55 @@ export class InventoryController {
   //like the user object of the current request for example
   @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Body() createInventoryDto: CreateInventoryDto, @CurrentUser() user: UserDto ) {
+  async create(@Body() createMultipleInventoriesDto: CreateMultipleInventoriesDto, @CurrentUser() user: UserDto ) {
     //the user type didnt exist, so i made a dto for it called the UserDto, remember this method for creating new types
-    const _user =  await this.inventoryService.create(createInventoryDto,user);
-    console.log(user)
-    return _user;
+    
+    // const _user =  await this.inventoryService.create(createInventoryDto,user);
+    // console.log(user)
+    // return _user;
+
+    // Check if reset flag is set
+    if (createMultipleInventoriesDto.reset) {
+      console.log('Reset flag is set. Deleting all existing inventories.');
+
+      // Find all existing inventories
+      const allInventories = await this.inventoryService.findAll();
+      console.log(`Found ${allInventories.length} inventories to delete.`);
+
+      // Remove each inventory by ID
+      for (const inventory of allInventories) {
+        await this.inventoryService.remove(inventory._id.toString()); // Assuming each inventory has an `id` field
+      }
+      console.log('All inventories deleted.');
+    }
+
+
+
+  
+    const results = []; // To store the results for each inventory object
+
+    for (const inventoryDto of createMultipleInventoriesDto.inventories) {
+      // Call the service for each inventory object
+      const result = await this.inventoryService.create(inventoryDto, user);
+      console.log(result)
+      results.push(result);
+    }
+
+    console.log(user);
+    console.log(results)
+
+    return {
+      message: 'Inventories processed successfully',
+      results,
+    };
   }
+
+
+
+
+
+
+  
 
 
   @UseGuards(JwtAuthGuard)
