@@ -1,4 +1,4 @@
-import { Body,Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body,Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UsersService } from './users.service';
 import { CurrentUser } from '@app/common';
@@ -22,9 +22,9 @@ export class UsersController {
     }
 
     @Get('profile')
-    async getUserProfile(@Body() getUserProfileDto: GetUserProfileDto){
-        return this.usersProfileService.getUserProfile(getUserProfileDto)
-    }
+    async getUserProfile(@Query('email') email: string) {
+    return this.usersProfileService.getUserProfile({ email });
+}
 
     @Post()
     async createUser(@Body() createUserDto: CreateUserDto){
